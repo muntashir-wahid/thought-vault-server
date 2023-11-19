@@ -13,10 +13,10 @@ const blogSchema = new mongoose.Schema(
       required: [true, "A blog must have a title"],
     },
     category: {
-      // type: mongoose.SchemaTypes.ObjectId,
-      // ref: "Category",
-      type: String,
-      required: [true, "A product must have a valid category id"],
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Category",
+      // type: String,
+      // required: [true, "A product must have a valid category id"],
     },
     details: {
       type: String,
@@ -39,6 +39,14 @@ const blogSchema = new mongoose.Schema(
     },
   }
 );
+
+blogSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "category",
+  });
+
+  next();
+});
 
 const Blog = mongoose.model("Blog", blogSchema);
 
